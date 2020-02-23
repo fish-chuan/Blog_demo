@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">Blog</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav mr-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="#">新貼文</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="about">個人資料</a>
+            </li>
+            {% else %}{% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="#">關於網站</a>
+            </li>
+        </ul>
+        {% if user.is_authenticated %}
+        <form action="accounts/logout" class="form-inline my-2 my-lg-0">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
+        </form>
+        {% else %}
+        <form action="{% url 'accounts:login' %}" class="form-inline my-2 my-lg-0">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+        </form>
+        <form action="{% url 'accounts:register' %}" class="form-inline my-2 my-lg-0">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Register</button>
+        </form>
+        {% endif %}
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top:30px">
+    <div class="row">
+        <div class="col-sm-4 sidenav">
+            <h4>貼文注意事項：</h4>
+            <h6>請勿散佈不實訊息</h6>
+        </div>
+        <div class="col-sm-8">
+            <form action="newpost" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h3>新貼文</h3><br>
+                <input type="hidden" name="author" value="{{user.username}}" />
+                <label for="title">標題</label>
+                <input type="text" name="title" required /><br>
+                <label for="img">圖片</label>
+                <input type="file" name="img" accept="image/*" required /><br>
+                <label for="content">內容</label>
+                <input type="text" name="content" required /><br>
+                <button class="btn btn-primary" type="submit">新增</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

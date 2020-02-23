@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">Blog</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container custom-container-width">
+    <h2 class="profile">Login</h2>
+    <form action="login" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="formGroupExampleInput">Username</label>
+            <input type="text" name="username" class="form-control" placeholder="Username" required />
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput2">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Password" required />
+        </div>
+        <input class="btn btn-primary" type="submit" value="Login" />
+    </form>
+</div>
+
+{% endblock %}
