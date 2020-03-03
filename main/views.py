@@ -7,13 +7,14 @@ from django.contrib.auth.decorators import login_required
 
 def index(request):
     data = Artical.objects.all()
+    user = str(request.user)
+    print(user)
     return render(request, 'index.html', {'data': data})
 
 
 def post(request, post_id):
     find = Artical.objects.filter(id=post_id)
     check = Like_Artical.objects.filter(post=post_id, user=request.user)
-    print(len(check))
     if len(check) == 0:
         is_like = False
     else:
@@ -32,15 +33,34 @@ def jump_register(request):
 def jump_logout(request):
     return redirect('/accounts/logout')
 
+def re_post(request):
+    return redirect("/postlist")
 
+def postlist(request):
+    if request.method == 'POST':
+        user = str(request.user)
+        target_id = request.POST['post_id']
+        num = int(target_id)
+        target_arti = Artical.objects.get(id=num)
+
+        target_user = str(target_arti.auth)
+        if user == target_user:
+            target_arti.delete()
+            arti_like = Like_Artical.objects.filter(post=num)
+            arti_like.delete()
+        return redirect('/postlist')
+    else:
+        data = Artical.objects.filter(auth=request.user)
+        return render(request, 'post_list.html', {'lists': data})
+
+@login_required
 def newpost(request):
     if request.method == 'POST':
         title = request.POST['title']
         img = request.FILES['img']
         content = request.POST['content']
         auth = request.POST['author']
-        data = Artical.objects.create(
-            title=title, img=img, content=content, auth=auth)
+        data = Artical.objects.create(title=title, img=img, content=content, auth=auth)
         data.save()
         return redirect('/')
     else:
