@@ -21,6 +21,8 @@ def post(request, post_id):
         is_like = True
     return render(request, 'post.html', {'Arti': find, 'is_like': is_like})
 
+def intro(request):
+    return render(request, 'intro.html')
 
 def jump_login(request):
     return redirect('/accounts/login')
